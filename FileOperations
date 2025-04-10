@@ -1,0 +1,87 @@
+/**
+ * FileOperations.java
+ * 
+ * This Java program demonstrates file operations including:
+ * 1. Writing to a file
+ * 2. Reading from a file
+ * 3. Modifying a file (replacing a word)
+ * 
+ * Author: Your Name
+ * Date: YYYY-MM-DD
+ */
+
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class FileOperations_2{
+    public static void main(String[] args) {
+        String filePath = "example.txt";
+        
+        // Writing to the file
+        writeFile(filePath, "Hello, this is a test file.\nThis is the second line.");
+        
+        // Reading from the file
+        System.out.println("File Contents:");
+        readFile(filePath);
+        
+        // Modifying the file
+        modifyFile(filePath, "test", "sample");
+        
+        // Reading the modified file
+        System.out.println("\nModified File Contents:");
+        readFile(filePath);
+    }
+    
+    /**
+     * Writes content to a specified file.
+     * @param filePath Path to the file
+     * @param content Content to write
+     */
+    public static void writeFile(String filePath, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(content);
+            System.out.println("File written successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Reads and prints the contents of a specified file.
+     * @param filePath Path to the file
+     */
+    public static void readFile(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Modifies a file by replacing occurrences of a word.
+     * @param filePath Path to the file
+     * @param oldString Word to be replaced
+     * @param newString Replacement word
+     */
+    public static void modifyFile(String filePath, String oldString, String newString) {
+        try {
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path);
+            List<String> modifiedLines = new ArrayList<>();
+            
+            for (String line : lines) {
+                modifiedLines.add(line.replace(oldString, newString));
+            }
+            
+            Files.write(path, modifiedLines);
+            System.out.println("File modified successfully.");
+        } catch (IOException e) {
+            System.out.println("Error modifying file: " + e.getMessage());
+        }
+    }
+}
